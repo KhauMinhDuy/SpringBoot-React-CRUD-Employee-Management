@@ -11,6 +11,9 @@ class Employee extends React.Component {
         }
 
         this.addEmployee = this.addEmployee.bind(this)
+        this.editEmployee = this.editEmployee.bind(this)
+        this.deleteEmployee = this.deleteEmployee.bind(this)
+        this.detailEmployee = this.detailEmployee.bind(this)
     }
 
     componentDidMount() {
@@ -23,6 +26,23 @@ class Employee extends React.Component {
 
     addEmployee() {
         this.props.history.push('/new-employee')
+    }
+
+    editEmployee(id) {
+        this.props.history.push(`/update-employee/${id}`)
+    }
+
+    deleteEmployee(id) {
+        EmployeeService.deleteEmployee(id)
+            .then(resp => {
+                this.setState({
+                    employees: this.state.employees.filter(employee => employee.id != id)
+                })
+            })
+    }
+
+    detailEmployee(id) {
+        this.props.history.push(`/detail-employee/${id}`)
     }
 
     render() {
@@ -48,6 +68,28 @@ class Employee extends React.Component {
                                     <td>{employee.firstName}</td>
                                     <td>{employee.lastName}</td>
                                     <td>{employee.email}</td>
+                                    <td>
+                                        <button 
+                                            className="btn btn-info mx-1" 
+                                            onClick={() => this.editEmployee(employee.id)
+                                            }>
+                                            Update
+                                        </button>
+
+                                        <button
+                                            className="btn btn-danger mx-1"
+                                            onClick={() => this.deleteEmployee(employee.id)
+                                            }>
+                                            Delete
+                                        </button>
+
+                                        <button
+                                            className="btn btn-primary mx-1"
+                                            onClick={() => this.detailEmployee(employee.id)
+                                            }>
+                                            Detail
+                                        </button>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
